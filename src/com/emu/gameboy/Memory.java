@@ -53,8 +53,9 @@ public class Memory {
 	}
 	
 	void copy(short destination,short source, int length) {
-		for(short i = 0;i<length;i++) {
-			writeByte((short) (destination+i),readByte((short) (source+i)));
+		if(length>0) {
+			writeByte((short) (destination),readByte((short) (source)));
+			copy(++destination,++source,--length);
 		}
 	}
 
@@ -111,11 +112,12 @@ public class Memory {
 			io[address - rIo.getMinNum()] = value;
 		else if(rHram.isInRange(address))
 			 hram[address-rHram.getMinNum()] = value;
+		else if(address == 0xff46) copy((short)0xFE00, (short) (value << 8),160); // OAM DMA
 		/* TODO GPU
 		else if(address == 0xff40) gpu.control = value;
 		else if(address == 0xff42) gpu.scrollY = value;
 		else if(address == 0xff43) gpu.scrollX = value;
-		else if(address == 0xff46) copy(0xfe00, value << 8, 160); // OAM DMA
+		
 		
 		else if(address == 0xff47) { // write only
 			int i;
@@ -140,7 +142,8 @@ public class Memory {
 		*/
 	}
 	void writeShort(short address,short value) {
-		
+		writeByte(address,(char) (value & 0x00FF));
+		writeByte((short) (address + 1),(char) ((value & 0x00FF)>>8));
 	}
 	void writeShortToStack(short value) {
 		reg.SP.set(  (short) (reg.SP.getValue()-2)	);
