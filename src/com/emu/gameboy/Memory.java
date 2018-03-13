@@ -1,6 +1,6 @@
 package com.emu.gameboy;
 
-import com.sun.glass.ui.Size;
+import java.awt.font.NumericShaper.Range;
 
 public class Memory {
 	char ioReset[] = {
@@ -17,30 +17,50 @@ public class Memory {
 			0xBB, 0xBB, 0x67, 0x63, 0x6E, 0x0E, 0xEC, 0xCC, 0xDD, 0xDC, 0x99, 0x9F, 0xBB, 0xB9, 0x33, 0x3E,
 			0x45, 0xEC, 0x52, 0xFA, 0x08, 0xB7, 0x07, 0x5D, 0x01, 0xFD, 0xC0, 0xFF, 0x08, 0xFC, 0x00, 0xE5,
 			0x0B, 0xF8, 0xC2, 0xCE, 0xF4, 0xF9, 0x0F, 0x7F, 0x45, 0x6D, 0x3D, 0xFE, 0x46, 0x97, 0x33, 0x5E,
-			0x08, 0xEF, 0xF1, 0xFF, 0x86, 0x83, 0x24, 0x74, 0x12, 0xFC, 0x00, 0x9F, 0xB4, 0xB7, 0x06, 0xD5,
+			0x08,0xEF, 0xF1, 0xFF, 0x86, 0x83, 0x24, 0x74, 0x12, 0xFC, 0x00, 0x9F, 0xB4, 0xB7, 0x06, 0xD5,
 			0xD0, 0x7A, 0x00, 0x9E, 0x04, 0x5F, 0x41, 0x2F, 0x1D, 0x77, 0x36, 0x75, 0x81, 0xAA, 0x70, 0x3A,
 			0x98, 0xD1, 0x71, 0x02, 0x4D, 0x01, 0xC1, 0xFF, 0x0D, 0x00, 0xD3, 0x05, 0xF9, 0x00, 0x0B, 0x00
 		}; //ioReset code.
-	static char[] cart = new char[0x8000];
-	static char[] sram = new char[0x2000];
-	static char[] io = new char[0x100];
-	static char[] vram = new char[0x2000];
-	static char[] oam = new char[0x100];
-	static char[] wram = new char[0x2000];
-	static char[] hram = new char[0x80];	
+	static int size_cart = 0x8000;
+	static int size_sram = 0x2000;
+	static int size_io = 0x100;
+	static int size_vram = 0x2000;
+	static int size_oam = 0x100;
+	static int size_wram = 0x2000;
+	static int size_hram = 0x80;
+	static char[] cart = new char[size_cart];
+	static char[] sram = new char[size_sram];
+	static char[] io = new char[size_io];
+	static char[] vram = new char[size_vram];
+	static char[] oam = new char[size_oam];
+	static char[] wram = new char[size_wram];
+	static char[] hram = new char[size_hram];	
+
 	
-	void copy(short destination,short source, Size length) {
+	void copy(short destination,short source, int length) {
 		
 	}
 
 	char readByte(short address) {
-		char value=' ';
-		return value;
+		if(address <= size_cart-1)
+			return cart[address];
+		else if((address >= (size_cart))&&(address < (size_cart + size_vram)))
+			return vram[address - size_cart];
+		else if(address >= size_cart+size_vram && address < size_cart+size_vram+size_sram)
+			return sram[address - size_cart+size_vram];
+		else if(address >= size_cart+size_vram+size_sram && address < size_cart+size_vram+size_sram+size_wram)
+			return wram[address - size_cart+size_vram+size_sram];
+		else if(address >= size_cart+size_vram+size_sram+size_wram && address < size_cart+size_vram+size_sram+size_wram+size_wram)
+			return wram[address - size_cart+size_vram+size_sram+size_wram];
+		else if(address >= size_cart+size_vram+size_sram+size_wram+size_wram && address < size_cart+size_vram+size_sram+size_wram+size_wram+size_oam)
+			return wram[address - size_cart+size_vram+size_sram+size_wram+size_wram];
+		
 	}
+	
 	short readShort(short address) {
 		short value=0;
 		return value;
-	}
+	}	
 	short readShortFromStack() {
 		short value=0;
 		return value;
