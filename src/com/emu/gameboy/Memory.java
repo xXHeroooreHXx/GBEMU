@@ -1,6 +1,5 @@
 package com.emu.gameboy;
 
-import java.awt.font.NumericShaper.Range;
 
 public class Memory {
 	char ioReset[] = {
@@ -28,6 +27,16 @@ public class Memory {
 	static int size_oam = 0x100;
 	static int size_wram = 0x2000;
 	static int size_hram = 0x80;
+	//range object, used later;
+	static Range rCart = new Range(0x0000,0x7FFF);
+	static Range rSram = new Range(0xA000,0xBFFF);
+	static Range rIo = new Range(0xFF00,0xFF7F);
+	static Range rVram = new Range(0x8000,0x9FFF);
+	static Range rOam = new Range(0xFE00,0xFE9F);
+	static Range rWram = new Range(0xC000,0xDFFF);
+	static Range rHram = new Range(0xFF80,0xFFFE);
+	static Range rEco = new Range(0xE000,0xFDFF);
+
 	static char[] cart = new char[size_cart];
 	static char[] sram = new char[size_sram];
 	static char[] io = new char[size_io];
@@ -42,19 +51,24 @@ public class Memory {
 	}
 
 	char readByte(short address) {
-		if(address <= size_cart-1)
+		if(rCart.isInRange(address))
 			return cart[address];
-		else if((address >= (size_cart))&&(address < (size_cart + size_vram)))
-			return vram[address - size_cart];
-		else if(address >= size_cart+size_vram && address < size_cart+size_vram+size_sram)
-			return sram[address - size_cart+size_vram];
-		else if(address >= size_cart+size_vram+size_sram && address < size_cart+size_vram+size_sram+size_wram)
-			return wram[address - size_cart+size_vram+size_sram];
-		else if(address >= size_cart+size_vram+size_sram+size_wram && address < size_cart+size_vram+size_sram+size_wram+size_wram)
-			return wram[address - size_cart+size_vram+size_sram+size_wram];
-		else if(address >= size_cart+size_vram+size_sram+size_wram+size_wram && address < size_cart+size_vram+size_sram+size_wram+size_wram+size_oam)
-			return wram[address - size_cart+size_vram+size_sram+size_wram+size_wram];
-		
+		else if(rVram.isInRange(address))
+			return vram[address - rVram.getMinNum()];
+		else if(rSram.isInRange(address))
+			return sram[address - rSram.getMinNum()];
+		else if(rWram.isInRange(address))
+			return wram[address - rWram.getMinNum()];
+		else if(rEco.isInRange(address))
+			return wram[address - rEco.getMinNum()];
+		else if(rOam.isInRange(address))
+			return oam[address - rOam.getMinNum()];
+					//TODO GPU ADDRESSES!
+		//else if(address == 0xff40) return gpu.control;
+		//else if(address == 0xff42) return gpu.scrollY;
+		//else if(address == 0xff43) return gpu.scrollX;
+		//else if(address == 0xff44) return gpu.scanline; // read only
+	return ' ';
 	}
 	
 	short readShort(short address) {
