@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.emu.gameboy.cpu.DoubleByteRegister;
+import com.emu.gameboy.cpu.SingleByteRegister;
+
 public class Test1 {
 
 	@Test

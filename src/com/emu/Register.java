@@ -1,4 +1,4 @@
-package com.gbemu;
+package com.emu;
 
 public interface Register {
 

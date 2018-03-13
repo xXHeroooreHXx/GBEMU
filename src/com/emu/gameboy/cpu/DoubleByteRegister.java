@@ -1,4 +1,6 @@
-package com.gbemu;
+package com.emu.gameboy.cpu;
+
+import com.emu.Register;
 
 public class DoubleByteRegister implements Register {
     private byte value;
