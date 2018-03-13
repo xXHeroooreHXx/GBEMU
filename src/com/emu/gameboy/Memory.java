@@ -53,7 +53,9 @@ public class Memory {
 	}
 	
 	void copy(short destination,short source, int length) {
-		
+		for(short i = 0;i<length;i++) {
+			writeByte((short) (destination+i),readByte((short) (source+i)));
+		}
 	}
 
 	char readByte(short address) {
@@ -69,6 +71,10 @@ public class Memory {
 			return wram[address - rEco.getMinNum()];
 		else if(rOam.isInRange(address))
 			return oam[address - rOam.getMinNum()];
+		else if(rIo.isInRange(address))
+			return io[address - rIo.getMinNum()];
+		else if(rHram.isInRange(address))
+			return hram[address-rHram.getMinNum()];
 					//TODO GPU ADDRESSES!
 		//else if(address == 0xff40) return gpu.control;
 		//else if(address == 0xff42) return gpu.scrollY;
@@ -101,11 +107,43 @@ public class Memory {
 			 wram[address - rEco.getMinNum()] = value;
 		else if(rOam.isInRange(address))
 			 oam[address - rOam.getMinNum()] = value;
+		else if(rIo.isInRange(address))
+			io[address - rIo.getMinNum()] = value;
+		else if(rHram.isInRange(address))
+			 hram[address-rHram.getMinNum()] = value;
+		/* TODO GPU
+		else if(address == 0xff40) gpu.control = value;
+		else if(address == 0xff42) gpu.scrollY = value;
+		else if(address == 0xff43) gpu.scrollX = value;
+		else if(address == 0xff46) copy(0xfe00, value << 8, 160); // OAM DMA
+		
+		else if(address == 0xff47) { // write only
+			int i;
+			for(i = 0; i < 4; i++) backgroundPalette[i] = palette[(value >> (i * 2)) & 3];
+		}
+		
+		else if(address == 0xff48) { // write only
+			int i;
+			for(i = 0; i < 4; i++) spritePalette[0][i] = palette[(value >> (i * 2)) & 3];
+		}
+		
+		else if(address == 0xff49) { // write only
+			int i;
+			for(i = 0; i < 4; i++) spritePalette[1][i] = palette[(value >> (i * 2)) & 3];
+			}
+	
+	INTERRUPCIONES
+	
+	else if(address == 0xff0f) interrupt.flags = value;
+	else if(address == 0xffff) interrupt.enable = value;
+		*
+		*/
 	}
 	void writeShort(short address,short value) {
 		
 	}
 	void writeShortToStack(short value) {
-		
+		reg.SP.set(  (short) (reg.SP.getValue()-2)	);
+		writeShort(reg.SP.getValue(),value);
 	}
 }

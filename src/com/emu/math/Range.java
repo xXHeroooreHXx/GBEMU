@@ -3,11 +3,11 @@ package com.emu.math;
 public class Range {
 	int minNum;
 	int maxNum;
-	Range(int x, int y){
+	public Range(int x, int y){
 		this.minNum = x;
 		this.maxNum = y;
 	}
-	boolean isInRange(int number){
+	public boolean isInRange(int number){
 		if((this.minNum<=number)&&(number<=this.maxNum)){
 			return true;
 		}
