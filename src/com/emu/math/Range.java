@@ -1,6 +1,6 @@
-package com.emu.gameboy;
+package com.emu.math;
 
-class Range {
+public class Range {
 	int minNum;
 	int maxNum;
 	Range(int x, int y){

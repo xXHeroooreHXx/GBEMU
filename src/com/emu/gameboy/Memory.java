@@ -1,5 +1,6 @@
 package com.emu.gameboy;
-
+import com.emu.gameboy.cpu.*;
+import com.emu.math.Range;
 
 public class Memory {
 	char ioReset[] = {
@@ -28,23 +29,28 @@ public class Memory {
 	static int size_wram = 0x2000;
 	static int size_hram = 0x80;
 	//range object, used later;
-	static Range rCart = new Range(0x0000,0x7FFF);
-	static Range rSram = new Range(0xA000,0xBFFF);
-	static Range rIo = new Range(0xFF00,0xFF7F);
-	static Range rVram = new Range(0x8000,0x9FFF);
-	static Range rOam = new Range(0xFE00,0xFE9F);
-	static Range rWram = new Range(0xC000,0xDFFF);
-	static Range rHram = new Range(0xFF80,0xFFFE);
-	static Range rEco = new Range(0xE000,0xFDFF);
+	 Range rCart = new Range(0x0000,0x7FFF);
+	 Range rSram = new Range(0xA000,0xBFFF);
+	 Range rIo = new Range(0xFF00,0xFF7F);
+	 Range rVram = new Range(0x8000,0x9FFF);
+	 Range rOam = new Range(0xFE00,0xFE9F);
+	 Range rWram = new Range(0xC000,0xDFFF);
+	 Range rHram = new Range(0xFF80,0xFFFE);
+	 Range rEco = new Range(0xE000,0xFDFF);
 
-	static char[] cart = new char[size_cart];
-	static char[] sram = new char[size_sram];
-	static char[] io = new char[size_io];
-	static char[] vram = new char[size_vram];
-	static char[] oam = new char[size_oam];
-	static char[] wram = new char[size_wram];
-	static char[] hram = new char[size_hram];	
-
+	 char[] cart = new char[size_cart];
+	 char[] sram = new char[size_sram];
+	 char[] io = new char[size_io];
+	 char[] vram = new char[size_vram];
+	 char[] oam = new char[size_oam];
+	 char[] wram = new char[size_wram];
+	 char[] hram = new char[size_hram];
+	
+	Registers reg;
+	
+	Memory(Registers _reg) {
+		this.reg = _reg;
+	}
 	
 	void copy(short destination,short source, int length) {
 		
@@ -68,20 +74,33 @@ public class Memory {
 		//else if(address == 0xff42) return gpu.scrollY;
 		//else if(address == 0xff43) return gpu.scrollX;
 		//else if(address == 0xff44) return gpu.scanline; // read only
+		
+		
 	return ' ';
 	}
 	
 	short readShort(short address) {
-		short value=0;
-		return value;
+		return (short) (readByte(address) | (readByte((short) (address + 1)) <<8));
 	}	
 	short readShortFromStack() {
-		short value=0;
+		short value = readShort(reg.getSP().getValue());
+		reg.SP.set((short) (value + 2));
 		return value;
 	}
 
 	void writeByte(short address,char value) {
-		
+		if(rCart.isInRange(address))
+			 cart[address] = value;
+		else if(rVram.isInRange(address))
+			 vram[address - rVram.getMinNum()] = value;
+		else if(rSram.isInRange(address))
+			 sram[address - rSram.getMinNum()] = value;
+		else if(rWram.isInRange(address))
+			 wram[address - rWram.getMinNum()] = value;
+		else if(rEco.isInRange(address))
+			 wram[address - rEco.getMinNum()] = value;
+		else if(rOam.isInRange(address))
+			 oam[address - rOam.getMinNum()] = value;
 	}
 	void writeShort(short address,short value) {
 		
