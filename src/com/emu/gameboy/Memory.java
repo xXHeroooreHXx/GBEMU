@@ -1,9 +1,8 @@
 package com.emu.gameboy;
 
+import com.sun.glass.ui.Size;
 
 public class Memory {
-	//extern const;
-	//Diferentes tipos de memoria
 	char ioReset[] = {
 			0x0F, 0x00, 0x7C, 0xFF, 0x00, 0x00, 0x00, 0xF8, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x01,
 			0x80, 0xBF, 0xF3, 0xFF, 0xBF, 0xFF, 0x3F, 0x00, 0xFF, 0xBF, 0x7F, 0xFF, 0x9F, 0xFF, 0xBF, 0xFF,
@@ -21,35 +20,39 @@ public class Memory {
 			0x08, 0xEF, 0xF1, 0xFF, 0x86, 0x83, 0x24, 0x74, 0x12, 0xFC, 0x00, 0x9F, 0xB4, 0xB7, 0x06, 0xD5,
 			0xD0, 0x7A, 0x00, 0x9E, 0x04, 0x5F, 0x41, 0x2F, 0x1D, 0x77, 0x36, 0x75, 0x81, 0xAA, 0x70, 0x3A,
 			0x98, 0xD1, 0x71, 0x02, 0x4D, 0x01, 0xC1, 0xFF, 0x0D, 0x00, 0xD3, 0x05, 0xF9, 0x00, 0x0B, 0x00
-		};
-	char[] cart;
-	char[] sram;
-	char[] io;
-	char[] vram;
-	char[] oam;
-	char[] wram;
-	char[] hram;
-		
-
-	Memory(int icart,int isram, int iio, int ivram, int ioam, int iwram, int ihram){
-
-		this.cart =new char[icart];
-		this.sram =new char[isram];
-		this.io =new char[iio];
-		this.vram =new char[ivram];
-		this.oam =new char[ioam];
-		this.wram =new char[iwram];
-		this.hram = new char[ihram];
+		}; //ioReset code.
+	static char[] cart = new char[0x8000];
+	static char[] sram = new char[0x2000];
+	static char[] io = new char[0x100];
+	static char[] vram = new char[0x2000];
+	static char[] oam = new char[0x100];
+	static char[] wram = new char[0x2000];
+	static char[] hram = new char[0x80];	
+	
+	void copy(short destination,short source, Size length) {
 		
 	}
-	
-	void copy(short destination,short source, size_t length);
 
-	char readByte(short address);
-	short readShort(short address);
-	short readShortFromStack();
+	char readByte(short address) {
+		char value=' ';
+		return value;
+	}
+	short readShort(short address) {
+		short value=0;
+		return value;
+	}
+	short readShortFromStack() {
+		short value=0;
+		return value;
+	}
 
-	void writeByte(short address,char value);
-	void writeShort(short address,short value);
-	void writeShortToStack(short value);
+	void writeByte(short address,char value) {
+		
+	}
+	void writeShort(short address,short value) {
+		
+	}
+	void writeShortToStack(short value) {
+		
+	}
 }
