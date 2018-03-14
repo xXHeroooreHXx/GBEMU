@@ -3,7 +3,7 @@ import com.emu.gameboy.cpu.*;
 import com.emu.math.Range;
 
 public class Memory implements com.emu.Memory{
-	short ioReset[] = {
+	char ioReset[] = {
 			0x0F, 0x00, 0x7C, 0xFF, 0x00, 0x00, 0x00, 0xF8, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x01,
 			0x80, 0xBF, 0xF3, 0xFF, 0xBF, 0xFF, 0x3F, 0x00, 0xFF, 0xBF, 0x7F, 0xFF, 0x9F, 0xFF, 0xBF, 0xFF,
 			0xFF, 0x00, 0x00, 0xBF, 0x77, 0xF3, 0xF1, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
@@ -20,7 +20,7 @@ public class Memory implements com.emu.Memory{
 			0x08,0xEF, 0xF1, 0xFF, 0x86, 0x83, 0x24, 0x74, 0x12, 0xFC, 0x00, 0x9F, 0xB4, 0xB7, 0x06, 0xD5,
 			0xD0, 0x7A, 0x00, 0x9E, 0x04, 0x5F, 0x41, 0x2F, 0x1D, 0x77, 0x36, 0x75, 0x81, 0xAA, 0x70, 0x3A,
 			0x98, 0xD1, 0x71, 0x02, 0x4D, 0x01, 0xC1, 0xFF, 0x0D, 0x00, 0xD3, 0x05, 0xF9, 0x00, 0x0B, 0x00
-	}; //ioReset code.
+		}; //ioReset code.
 	final static int size_cart = 0x8000;
 	final static int size_sram = 0x2000;
 	final static int size_io = 0x100;
@@ -29,29 +29,30 @@ public class Memory implements com.emu.Memory{
 	final static int size_wram = 0x2000;
 	final static int size_hram = 0x80;
 	//range object, used later;
-	Range rCart = new Range(0x0000,0x7FFF);
-	Range rSram = new Range(0xA000,0xBFFF);
-	Range rIo = new Range(0xFF00,0xFF7F);
-	Range rVram = new Range(0x8000,0x9FFF);
-	Range rOam = new Range(0xFE00,0xFE9F);
-	Range rWram = new Range(0xC000,0xDFFF);
-	Range rHram = new Range(0xFF80,0xFFFE);
-	Range rEco = new Range(0xE000,0xFDFF);
-
-	byte[] cart = new byte[size_cart];
-	byte[] sram = new byte[size_sram];
-	byte[] io = new byte[size_io];
-	byte[] vram = new byte[size_vram];
-	byte[] oam = new byte[size_oam];
-	byte[] wram = new byte[size_wram];
-	byte[] hram = new byte[size_hram];
+	 Range rCart = new Range(0x0000,0x7FFF);
+	 Range rSram = new Range(0xA000,0xBFFF);
+	 Range rIo = new Range(0xFF00,0xFF7F);
+	 Range rVram = new Range(0x8000,0x9FFF);
+	 Range rOam = new Range(0xFE00,0xFE9F);
+	 Range rWram = new Range(0xC000,0xDFFF);
+	 Range rHram = new Range(0xFF80,0xFFFE);
+	 Range rEco = new Range(0xE000,0xFDFF);
+	 MemoryFragment memory[] = {
+			 new MemoryFragment("cart",size_cart,rCart),
+			 new MemoryFragment("sram",size_sram,rSram),
+			 new MemoryFragment("io",size_io,rIo),
+			 new MemoryFragment("vram",size_vram,rVram),
+			 new MemoryFragment("oam",size_oam,rOam),
+			 new MemoryFragment("wram",size_wram,rWram),
+			 new MemoryFragment("hram",size_hram,rHram),
+	 };
 	
 	Registers reg;
-
+	
 	public Memory(Registers _reg) {
 		this.reg = _reg;
 	}
-
+	 
 	void copy(short destination,short source, int length) {
 		if(length>0) {
 			writeByte((short) (destination),readByte((short) (source)));
@@ -60,32 +61,14 @@ public class Memory implements com.emu.Memory{
 	}
 
 	byte readByte(short address) {
-		if(rCart.isInRange(address))
-			return cart[address];
-		else if(rVram.isInRange(address))
-			return vram[address - rVram.getMinNum()];
-		else if(rSram.isInRange(address))
-			return sram[address - rSram.getMinNum()];
-		else if(rWram.isInRange(address))
-			return wram[address - rWram.getMinNum()];
-		else if(rEco.isInRange(address))
-			return wram[address - rEco.getMinNum()];
-		else if(rOam.isInRange(address))
-			return oam[address - rOam.getMinNum()];
-		else if(rIo.isInRange(address))
-			return io[address - rIo.getMinNum()];
-		else if(rHram.isInRange(address))
-			return hram[address-rHram.getMinNum()];
-		//TODO GPU ADDRESSES!
-		//else if(address == 0xff40) return gpu.control;
-		//else if(address == 0xff42) return gpu.scrollY;
-		//else if(address == 0xff43) return gpu.scrollX;
-		//else if(address == 0xff44) return gpu.scanline; // read only
-
-
-		return ' ';
+		for(MemoryFragment i:memory)
+			if(i.rango.isInRange(address))
+				return i.memory[address-i.rango.getMinNum()];
+		
+		
+	return ' ';
 	}
-
+	
 	short readShort(short address) {
 		return (short) (readByte(address) | (readByte((short) (address + 1)) <<8));
 	}	
@@ -96,50 +79,39 @@ public class Memory implements com.emu.Memory{
 	}
 
 	void writeByte(short address,byte value) {
-		if(rCart.isInRange(address))
-			cart[address] = value;
-		else if(rVram.isInRange(address))
-			vram[address - rVram.getMinNum()] = value;
-		else if(rSram.isInRange(address))
-			sram[address - rSram.getMinNum()] = value;
-		else if(rWram.isInRange(address))
-			wram[address - rWram.getMinNum()] = value;
-		else if(rEco.isInRange(address))
-			wram[address - rEco.getMinNum()] = value;
-		else if(rOam.isInRange(address))
-			oam[address - rOam.getMinNum()] = value;
-		else if(rIo.isInRange(address))
-			io[address - rIo.getMinNum()] = value;
-		else if(rHram.isInRange(address))
-			hram[address-rHram.getMinNum()] = value;
-		else if(address == 0xff46) copy((short)0xFE00, (short) (value << 8),160); // OAM DMA
+
+		if(address == 0xff46) copy((short)0xFE00, (short) (value << 8),160); // OAM DMA
+		else
+		for(MemoryFragment i:memory)
+			if(i.rango.isInRange(address))
+				i.memory[address-i.rango.getMinNum()]=value;
 		/* TODO GPU
 		else if(address == 0xff40) gpu.control = value;
 		else if(address == 0xff42) gpu.scrollY = value;
 		else if(address == 0xff43) gpu.scrollX = value;
-
-
+		
+		
 		else if(address == 0xff47) { // write only
 			int i;
 			for(i = 0; i < 4; i++) backgroundPalette[i] = palette[(value >> (i * 2)) & 3];
 		}
-
+		
 		else if(address == 0xff48) { // write only
 			int i;
 			for(i = 0; i < 4; i++) spritePalette[0][i] = palette[(value >> (i * 2)) & 3];
 		}
-
+		
 		else if(address == 0xff49) { // write only
 			int i;
 			for(i = 0; i < 4; i++) spritePalette[1][i] = palette[(value >> (i * 2)) & 3];
 			}
-
+	
 	INTERRUPCIONES
-
+	
 	else if(address == 0xff0f) interrupt.flags = value;
 	else if(address == 0xffff) interrupt.enable = value;
-		 *
-		 */
+		*
+		*/
 	}
 	void writeShort(short address,short value) {
 		writeByte(address,(byte) (value & 0x00FF));
