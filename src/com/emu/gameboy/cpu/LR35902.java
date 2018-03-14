@@ -19,6 +19,9 @@ public class LR35902 implements CPU {
 		registers = new Registers();
 		mmu = new Memory(registers);
 	}
+	void runCPU() {
+		
+	}
 	
 
 }
