@@ -1,5 +1,6 @@
 package com.emu.gameboy.mmu;
 import com.emu.gameboy.cpu.*;
+import com.emu.gameboy.interrupts.Interrupts;
 import com.emu.math.Range;
 
 public class Memory implements com.emu.Memory{
@@ -48,9 +49,10 @@ public class Memory implements com.emu.Memory{
 	 };
 	
 	Registers reg;
-	
-	public Memory(Registers _reg) {
+	Interrupts interrupts;
+	public Memory(Registers _reg,Interrupts _interrupts) {
 		this.reg = _reg;
+		this.interrupts = _interrupts;
 	}
 	 
 	void copy(short destination,short source, int length) {
@@ -61,7 +63,9 @@ public class Memory implements com.emu.Memory{
 	}
 
 	byte readByte(short address) {
-		for(MemoryFragment i:memory)
+		if(address == 0xff0f) return interrupts.flags;
+		else if(address == 0xffff) return interrupts.enable;
+		else for(MemoryFragment i:memory)
 			if(i.rango.isInRange(address))
 				return i.memory[address-i.rango.getMinNum()];
 		
@@ -81,6 +85,8 @@ public class Memory implements com.emu.Memory{
 	void writeByte(short address,byte value) {
 
 		if(address == 0xff46) copy((short)0xFE00, (short) (value << 8),160); // OAM DMA
+		else if(address == 0xff0f) interrupts.flags = value;
+		else if(address == 0xffff) interrupts.enable = value;
 		else
 		for(MemoryFragment i:memory)
 			if(i.rango.isInRange(address))
@@ -105,11 +111,7 @@ public class Memory implements com.emu.Memory{
 			int i;
 			for(i = 0; i < 4; i++) spritePalette[1][i] = palette[(value >> (i * 2)) & 3];
 			}
-	
-	INTERRUPCIONES
-	
-	else if(address == 0xff0f) interrupt.flags = value;
-	else if(address == 0xffff) interrupt.enable = value;
+
 		*
 		*/
 	}
