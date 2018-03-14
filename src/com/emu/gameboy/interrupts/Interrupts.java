@@ -11,5 +11,16 @@ public class Interrupts implements com.emu.Interrupts {
 				if(((int) (fire) & InterruptKind.values()[i].getValue()) == 1)
 					option = i;
 		}
+		switch (option) {
+		case 0:
+			flags &= ~InterruptKind.INTERRUPTS_VBLANK.getValue();
+			vblank();
+			break;
+	
+		case 1:
+		}
+	}
+	void vblank() {
+		
 	}
 }
