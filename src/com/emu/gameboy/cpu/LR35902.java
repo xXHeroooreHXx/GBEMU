@@ -10,14 +10,16 @@ public class LR35902 implements CPU {
 	int t,m; //Time clocks
 	public LR35902() {
 		registers = new Registers();
-		mmu = new Memory(registers);
+		Interrupts interrupts = new Interrupts();
+		mmu = new Memory(registers,interrupts);
 	}
 	
 	void resetCPU(){
 		t = 0;
 		m = 0;
 		registers = new Registers();
-		mmu = new Memory(registers);
+		Interrupts interrupts = new Interrupts();
+		mmu = new Memory(registers,interrupts);
 	}
 	void runCPU() {
 		

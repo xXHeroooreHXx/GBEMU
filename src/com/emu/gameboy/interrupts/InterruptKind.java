@@ -8,7 +8,7 @@ enum InterruptKind {
 		INTERRUPTS_JOYPAD (1 << 4);
 	private final int value;
 
-	InterruptKind(int value){
+	private InterruptKind(int value){
 		this.value = value;
 	}
 	int getValue() {
