@@ -48,7 +48,7 @@ public class Memory implements com.emu.Memory{
 	
 	Registers reg;
 	
-	Memory(Registers _reg) {
+	public Memory(Registers _reg) {
 		this.reg = _reg;
 	}
 	
@@ -148,5 +148,13 @@ public class Memory implements com.emu.Memory{
 	void writeShortToStack(short value) {
 		reg.SP.set(  (short) (reg.SP.getValue()-2)	);
 		writeShort(reg.SP.getValue(),value);
+	}
+
+	public Registers getReg() {
+		return reg;
+	}
+
+	public void setReg(Registers reg) {
+		this.reg = reg;
 	}
 }
