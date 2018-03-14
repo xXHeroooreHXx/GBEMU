@@ -8,6 +8,7 @@ enum InterruptKind {
 		INTERRUPTS_SERIAL (1 << 3),
 		INTERRUPTS_JOYPAD (1 << 4);
 	private final int value;
+
 	InterruptKind(int value){
 		this.value = value;
 	}
