@@ -4,8 +4,8 @@ import com.emu.Register;
 
 public class Registers {
 	
-	private SingleByteRegister A, B, C, D, E, F, H, L;
-	private DoubleByteRegister AF, BC, DE, HL, SP, PC;
+	public SingleByteRegister A, B, C, D, E, F, H, L;
+	public DoubleByteRegister AF, BC, DE, HL, SP, PC;
 	
 	public Registers() {
 		Register[] registers = new Register[]{A, B, C, D, E, F, H, L, AF, BC, DE, HL, SP, PC};

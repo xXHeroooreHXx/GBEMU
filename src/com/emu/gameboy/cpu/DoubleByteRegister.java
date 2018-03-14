@@ -3,7 +3,7 @@ package com.emu.gameboy.cpu;
 import com.emu.Register;
 
 public class DoubleByteRegister implements Register {
-    private byte value;
+    private short value;
     private SingleByteRegister a, b;
     public DoubleByteRegister(byte _value){
         value = _value;
@@ -12,13 +12,13 @@ public class DoubleByteRegister implements Register {
         a = _a;
         b = _b;
     }
-    public byte getValue(){
+    public short getValue(){
         return value;
     }
     public byte[] getAll(){
         return new byte[]{a.get(), b.get()};
     }
-    public void set(byte _value){
+    public void set(short _value){
         value = _value;
     }
 }
