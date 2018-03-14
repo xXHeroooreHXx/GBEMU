@@ -1,4 +1,4 @@
-package com.emu.gameboy;
+package com.emu.gameboy.interrupts;
 
 enum InterruptKind {
 

@@ -1,4 +1,4 @@
-package com.emu.gameboy;
+package com.emu.gameboy.mmu;
 import com.emu.gameboy.cpu.*;
 import com.emu.math.Range;
 
