@@ -8,11 +8,15 @@ public class PPU {
 	byte scrollY;
 	byte scanline;
 	long tick;
+	static int lastTick = 0;
 	Colour backgroundPalette[];
 	Colour spritePalette[][];
 	byte tiles[][][];
 	void gpuStep() {
+		int gpuMode = GPU_MODE.GPU_MODE_HBLANK.getValue();
+		switch(gpuMode) {
 		
+		}
 	}
 	void hblank() {
 		
