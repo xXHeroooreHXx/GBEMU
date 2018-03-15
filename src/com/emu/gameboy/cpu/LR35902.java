@@ -7,7 +7,8 @@ import com.emu.CPU;
 public class LR35902 implements CPU {
 	private Registers registers,rsv;
 	Memory mmu;
-	int t,m; //Time clocks
+	int ticks;
+	int stopped; 
 	public LR35902() {
 		registers = new Registers();
 		Interrupts interrupts = new Interrupts();
