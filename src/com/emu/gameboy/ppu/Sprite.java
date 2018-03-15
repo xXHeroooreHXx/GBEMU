@@ -13,4 +13,4 @@ public class Sprite {
 		byte tile;
 		BitSet options = new BitSet(4);
 
-}
+}	
