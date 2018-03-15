@@ -1,5 +1,7 @@
 package com.emu.gameboy.keys;
 
+import java.util.BitSet;
+
 //buttons layout:
 // 0 -> a
 // 1 -> b
@@ -10,7 +12,7 @@ package com.emu.gameboy.keys;
 // 6 -> up
 // 7 -> down
 public class Keys {
-			 byte buttons;
+	BitSet Buttons = new BitSet(8);		 
 
 
 
