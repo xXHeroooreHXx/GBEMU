@@ -15,7 +15,7 @@ public class PPU {
 	void gpuStep() {
 		int gpuMode = GPU_MODE.GPU_MODE_HBLANK.getValue();
 		switch(gpuMode) {
-		Ppu
+		
 		}
 	}
 	void hblank() {
