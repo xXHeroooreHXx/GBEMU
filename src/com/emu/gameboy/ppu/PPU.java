@@ -8,7 +8,7 @@ public class PPU {
 	byte scrollY;
 	byte scanline;
 	long tick;
-	static int lastTick = 0;
+	int lastTick = 0;
 	Colour backgroundPalette[];
 	Colour spritePalette[][];
 	byte tiles[][][];
