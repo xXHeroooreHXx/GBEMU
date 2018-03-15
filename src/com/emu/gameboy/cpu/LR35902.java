@@ -6,18 +6,20 @@ import com.emu.CPU;
 
 public class LR35902 implements CPU {
 	private Registers registers,rsv;
-	Memory mmu;
+	Memory mmu,mms;
 	int ticks;
 	int stopped; 
 	public LR35902() {
+		rsv = registers;
 		registers = new Registers();
 		Interrupts interrupts = new Interrupts();
+		mms = mmu;
 		mmu = new Memory(registers,interrupts);
 	}
 	
 	void resetCPU(){
-		t = 0;
-		m = 0;
+		ticks = 0;
+		stopped = 0;
 		registers = new Registers();
 		Interrupts interrupts = new Interrupts();
 		mmu = new Memory(registers,interrupts);
